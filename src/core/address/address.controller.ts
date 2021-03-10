@@ -21,6 +21,7 @@ export class AddressController {
   constructor(
     private readonly addressService: AddressService, // private readonly customerService: CustomerService,
   ) {}
+
   @Post('/add-address')
   public async createAddress(
     @Body() addressParams: CreateAddress,
@@ -29,6 +30,7 @@ export class AddressController {
     const data = await this.addressService.list({});
     return response.status(200).send({ message: 'create address', data: data });
   }
+
   @Put('/update-address/:id')
   public async updateAddress(
     @Body() addressParams: CreateAddress,
@@ -38,6 +40,7 @@ export class AddressController {
   ) {
     return response.status(200).send({ message: 'update address' });
   }
+
   @Get('/address-list')
   public async addressList(
     @Query('limit') limit: number,
@@ -51,6 +54,7 @@ export class AddressController {
 
     return response.status(200).send({ message: 'list address', data: data });
   }
+
   @Delete('/delete-address/:id')
   public async deleteAddress(
     @Param('id') id: number,

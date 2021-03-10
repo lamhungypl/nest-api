@@ -29,9 +29,11 @@ export interface BaseServiceImpl<T> {
 export class BaseService<T extends BaseModel, R extends Repository<T>>
   implements BaseServiceImpl<T> {
   public readonly repository: R;
+
   constructor(repository: R) {
     this.repository = repository;
   }
+
   public create(newModel: T) {
     return this.repository.save(newModel as any);
   }
@@ -43,6 +45,7 @@ export class BaseService<T extends BaseModel, R extends Repository<T>>
   public findOne(options?: FindOneOptions<T>) {
     return this.repository.findOne(options);
   }
+
   public findOneById(
     id?: string | number | Date | ObjectID,
     options?: FindOneOptions<T>,
@@ -73,6 +76,7 @@ export class BaseService<T extends BaseModel, R extends Repository<T>>
   public list(options: FindManyOptions<T>) {
     return this.repository.find(options);
   }
+
   public count(options: FindManyOptions<T>) {
     return this.repository.count(options);
   }

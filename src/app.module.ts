@@ -4,9 +4,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 import { AddressModule } from './core/address/address.module';
+import { BannerModule } from '@modules/banner/banner.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(), AddressModule],
+  imports: [TypeOrmModule.forRoot(), AddressModule, BannerModule],
   controllers: [AppController],
   providers: [AppService],
 })
