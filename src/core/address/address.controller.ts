@@ -11,21 +11,23 @@ import {
   Res,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { AddressServices } from 'src/services/address/address.services';
-import { CreateAddress } from './address.constant';
+import { AddressService } from './address.service';
+
+import { CreateAddress } from './interfaces/address.interface';
 // import { CustomerService } from 'src/services/customer/customer.services';
 
 @Controller('/address')
 export class AddressController {
   constructor(
-    private readonly addressService: AddressServices, // private readonly customerService: CustomerService,
+    private readonly addressService: AddressService, // private readonly customerService: CustomerService,
   ) {}
   @Post('/add-address')
   public async createAddress(
     @Body() addressParams: CreateAddress,
     @Res() response: Response,
   ) {
-    return response.status(200).send({ message: 'create address' });
+    const data = await this.addressService.list({});
+    return response.status(200).send({ message: 'create address', data: data });
   }
   @Put('/update-address/:id')
   public async updateAddress(
@@ -45,7 +47,9 @@ export class AddressController {
     @Res() response: Response,
     @Req() request: Request,
   ) {
-    return response.status(200).send({ message: 'list address' });
+    const data = await this.addressService.list({});
+
+    return response.status(200).send({ message: 'list address', data: data });
   }
   @Delete('/delete-address/:id')
   public async deleteAddress(
