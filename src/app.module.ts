@@ -8,6 +8,7 @@ import { BannerModule } from '@modules/banner/banner.module';
 import { CategoryModule } from '@modules/category/category.module';
 import { ProductModule } from '@modules/product/product.module';
 import { CustomerModule } from '@modules/customer/customer.module';
+import { CustomerWishlistModule } from '@modules/customerWishlist/customer-wishlist.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { CustomerModule } from '@modules/customer/customer.module';
     CategoryModule,
     ProductModule,
     CustomerModule,
+    CustomerWishlistModule,
   ],
   controllers: [AppController],
   providers: [AppService],

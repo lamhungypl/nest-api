@@ -1,4 +1,5 @@
 import { BaseModel } from '@modules/common/base.model';
+import { CustomerWishlist } from '@modules/customerWishlist/customer-wishlist.entity';
 import { ProductToCategory } from '@modules/productToCategory/productToCategory.entity';
 import { IsNotEmpty } from 'class-validator';
 import { format } from 'date-fns';
@@ -112,11 +113,11 @@ export class Product extends BaseModel {
   // @OneToMany(type => ProductImage, productImage => productImage.product)
   // public productImage: ProductImage[];
 
-  // @OneToMany(
-  //   type => CustomerWishlist,
-  //   customerWishlist => customerWishlist.product
-  // )
-  // public wishlist: CustomerWishlist[];
+  @OneToMany(
+    (type) => CustomerWishlist,
+    (customerWishlist) => customerWishlist.product,
+  )
+  public wishlist: CustomerWishlist[];
 
   // @OneToMany(
   //   type => ProductRelated,

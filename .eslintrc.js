@@ -4,7 +4,7 @@ module.exports = {
     project: 'tsconfig.json',
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint/eslint-plugin'],
+  plugins: ['@typescript-eslint/eslint-plugin', 'import'],
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
@@ -25,5 +25,6 @@ module.exports = {
       'always',
       { exceptAfterSingleLine: true },
     ],
+    'import/newline-after-import': 'error',
   },
 };
