@@ -7,6 +7,7 @@ import { AddressModule } from './core/address/address.module';
 import { BannerModule } from '@modules/banner/banner.module';
 import { CategoryModule } from '@modules/category/category.module';
 import { ProductModule } from '@modules/product/product.module';
+import { CustomerModule } from '@modules/customer/customer.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ProductModule } from '@modules/product/product.module';
     BannerModule,
     CategoryModule,
     ProductModule,
+    CustomerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
