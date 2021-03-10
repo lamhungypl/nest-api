@@ -4,7 +4,6 @@
   "port": 8889,
   "username": "root",
   "password": "root",
-  "database": "adminSample",
-  "entities": ["dist/**/*.entity{.ts,.js}"],
-  "synchronize": true
+  "database": "blank-iian-ecom",
+  "entities": ["dist/**/*.entity{.ts,.js}"]
 }

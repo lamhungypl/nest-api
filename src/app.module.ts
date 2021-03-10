@@ -5,9 +5,17 @@ import { AppService } from './app.service';
 
 import { AddressModule } from './core/address/address.module';
 import { BannerModule } from '@modules/banner/banner.module';
+import { CategoryModule } from '@modules/category/category.module';
+import { ProductModule } from '@modules/product/product.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(), AddressModule, BannerModule],
+  imports: [
+    TypeOrmModule.forRoot(),
+    AddressModule,
+    BannerModule,
+    CategoryModule,
+    ProductModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
