@@ -11,6 +11,7 @@ import { CustomerModule } from '@modules/customer/customer.module';
 import { CustomerWishlistModule } from '@modules/customerWishlist/customer-wishlist.module';
 import { EmailTemplateModule } from '@modules/emailTemplate/email-template.module';
 import { LanguageModule } from '@modules/language/language.module';
+import { ManufactureModule } from '@modules/manufacture/manufacture.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { LanguageModule } from '@modules/language/language.module';
     CustomerWishlistModule,
     EmailTemplateModule,
     LanguageModule,
+    ManufactureModule,
   ],
   controllers: [AppController],
   providers: [AppService],
