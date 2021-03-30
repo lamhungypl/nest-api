@@ -10,6 +10,7 @@ import { ProductModule } from '@modules/product/product.module';
 import { CustomerModule } from '@modules/customer/customer.module';
 import { CustomerWishlistModule } from '@modules/customerWishlist/customer-wishlist.module';
 import { EmailTemplateModule } from '@modules/emailTemplate/email-template.module';
+import { LanguageModule } from '@modules/language/language.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { EmailTemplateModule } from '@modules/emailTemplate/email-template.modul
     CustomerModule,
     CustomerWishlistModule,
     EmailTemplateModule,
+    LanguageModule,
   ],
   controllers: [AppController],
   providers: [AppService],
