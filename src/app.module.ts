@@ -12,6 +12,7 @@ import { CustomerWishlistModule } from '@modules/customerWishlist/customer-wishl
 import { EmailTemplateModule } from '@modules/emailTemplate/email-template.module';
 import { LanguageModule } from '@modules/language/language.module';
 import { ManufactureModule } from '@modules/manufacture/manufacture.module';
+import { MediaController } from '@modules/media/media.controller';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { ManufactureModule } from '@modules/manufacture/manufacture.module';
     EmailTemplateModule,
     LanguageModule,
     ManufactureModule,
+    MediaController,
   ],
   controllers: [AppController],
   providers: [AppService],
