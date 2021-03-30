@@ -16,6 +16,7 @@ import { MediaController } from '@modules/media/media.controller';
 import { OrderController } from '@modules/order/order.controller';
 import { OrderStatusController } from '@modules/order-status/order-status.controller';
 import { PageController } from '@modules/page/page.controller';
+import { RoleController } from '@modules/role/role.controller';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { PageController } from '@modules/page/page.controller';
     OrderController,
     OrderStatusController,
     PageController,
+    RoleController,
   ],
   controllers: [AppController],
   providers: [AppService],
