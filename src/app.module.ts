@@ -13,6 +13,7 @@ import { EmailTemplateModule } from '@modules/emailTemplate/email-template.modul
 import { LanguageModule } from '@modules/language/language.module';
 import { ManufactureModule } from '@modules/manufacture/manufacture.module';
 import { MediaController } from '@modules/media/media.controller';
+import { OrderController } from '@modules/order/order.controller';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { MediaController } from '@modules/media/media.controller';
     LanguageModule,
     ManufactureModule,
     MediaController,
+    OrderController,
   ],
   controllers: [AppController],
   providers: [AppService],
