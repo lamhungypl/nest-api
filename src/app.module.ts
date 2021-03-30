@@ -15,6 +15,7 @@ import { ManufactureModule } from '@modules/manufacture/manufacture.module';
 import { MediaController } from '@modules/media/media.controller';
 import { OrderController } from '@modules/order/order.controller';
 import { OrderStatusController } from '@modules/order-status/order-status.controller';
+import { PageController } from '@modules/page/page.controller';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { OrderStatusController } from '@modules/order-status/order-status.contro
     MediaController,
     OrderController,
     OrderStatusController,
+    PageController,
   ],
   controllers: [AppController],
   providers: [AppService],
