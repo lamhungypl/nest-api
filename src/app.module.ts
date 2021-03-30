@@ -17,6 +17,7 @@ import { OrderController } from '@modules/order/order.controller';
 import { OrderStatusController } from '@modules/order-status/order-status.controller';
 import { PageController } from '@modules/page/page.controller';
 import { RoleController } from '@modules/role/role.controller';
+import { SettingController } from '@modules/setting/setting.controller';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { RoleController } from '@modules/role/role.controller';
     OrderStatusController,
     PageController,
     RoleController,
+    SettingController,
   ],
   controllers: [AppController],
   providers: [AppService],
