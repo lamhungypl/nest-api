@@ -12,12 +12,14 @@ import { CustomerWishlistModule } from '@modules/customerWishlist/customer-wishl
 import { EmailTemplateModule } from '@modules/emailTemplate/email-template.module';
 import { LanguageModule } from '@modules/language/language.module';
 import { ManufactureModule } from '@modules/manufacture/manufacture.module';
-import { MediaController } from '@modules/media/media.controller';
-import { OrderController } from '@modules/order/order.controller';
-import { OrderStatusController } from '@modules/order-status/order-status.controller';
-import { PageController } from '@modules/page/page.controller';
-import { RoleController } from '@modules/role/role.controller';
-import { SettingController } from '@modules/setting/setting.controller';
+
+import { MediaModule } from '@modules/media/media.module';
+import { OrderModule } from '@modules/order/order.module';
+import { OrderStatusModule } from '@modules/order-status/order-status.module';
+import { PageModule } from '@modules/page/page.module';
+import { RoleModule } from '@modules/role/role.module';
+import { SettingModule } from '@modules/setting/setting.module';
+import { UserModule } from '@modules/user/user.module';
 
 @Module({
   imports: [
@@ -31,12 +33,13 @@ import { SettingController } from '@modules/setting/setting.controller';
     EmailTemplateModule,
     LanguageModule,
     ManufactureModule,
-    MediaController,
-    OrderController,
-    OrderStatusController,
-    PageController,
-    RoleController,
-    SettingController,
+    MediaModule,
+    OrderModule,
+    OrderStatusModule,
+    PageModule,
+    RoleModule,
+    SettingModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

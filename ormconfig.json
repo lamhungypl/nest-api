@@ -5,5 +5,9 @@
   "username": "postgres",
   "password": "a123456",
   "database": "iian-db",
-  "entities": ["dist/**/*.entity{.ts,.js}"]
+  "entities": ["dist/**/*.entity.{ts,js}"],
+  "migrations": ["dist/database/migrations/*.{ts,js}"],
+  "cli": {
+    "migrationsDir": "src/database/migrations/"
+  }
 }
