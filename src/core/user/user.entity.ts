@@ -13,8 +13,8 @@ import * as bcrypt from 'bcrypt';
 import { IsEmail, IsNotEmpty } from 'class-validator';
 import { Exclude } from 'class-transformer';
 import { format } from 'date-fns';
+import { UserGroup } from '@modules/user-group/user-group.entity';
 
-type UserGroup = any;
 type AccessToken = any;
 
 @Entity('users')
@@ -94,8 +94,8 @@ export class User extends BaseModel {
   @JoinColumn({ name: 'user_group_id' })
   public usergroup: UserGroup;
 
-  @OneToMany((type) => AccessToken, (accessToken) => accessToken.user)
-  public accessToken: AccessToken[];
+  // @OneToMany('', (accessToken: any) => accessToken.user)
+  // public accessToken: AccessToken[];
 
   @BeforeInsert()
   public async hashPassword(): Promise<void> {
