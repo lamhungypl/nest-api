@@ -18,7 +18,10 @@ export class UserController {
       where: { username: loginParams.username },
     });
     if (user) {
-      const matchPassword = User.comparePassword(user, loginParams.password);
+      const matchPassword = await User.comparePassword(
+        user,
+        loginParams.password,
+      );
       if (matchPassword) {
         const token = this.jwt.sign({ id: user.userId });
         const successResponse = {

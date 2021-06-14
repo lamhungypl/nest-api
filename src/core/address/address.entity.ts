@@ -61,11 +61,11 @@ export class Address extends BaseModel {
 
   @BeforeInsert()
   public async createDetails(): Promise<void> {
-    this.createdDate = format(new Date(), 'YYYY-MM-DD HH:mm:ss');
+    this.createdDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
   }
 
   @BeforeUpdate()
   public async updateDetails(): Promise<void> {
-    this.modifiedDate = format(new Date(), 'YYYY-MM-DD HH:mm:ss');
+    this.modifiedDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
   }
 }

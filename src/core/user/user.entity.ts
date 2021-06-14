@@ -30,16 +30,8 @@ export class User extends BaseModel {
     });
   }
 
-  public static comparePassword(
-    user: User,
-    password: string,
-  ): Promise<boolean> {
-    //console.log(password);
-    return new Promise((resolve, reject) => {
-      bcrypt.compare(password, user.password, (err, res) => {
-        resolve(res === true);
-      });
-    });
+  public static comparePassword(user: User, password: string) {
+    return bcrypt.compare(password, user.password);
   }
 
   @PrimaryGeneratedColumn({ name: 'user_id' })
@@ -100,11 +92,11 @@ export class User extends BaseModel {
   @BeforeInsert()
   public async hashPassword(): Promise<void> {
     // this.password = await User.hashPassword(this.password);
-    this.createdDate = format(new Date(), 'YYYY-MM-DD HH:mm:ss');
+    this.createdDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
   }
 
   @BeforeUpdate()
   public async updateDetails(): Promise<void> {
-    this.modifiedDate = format(new Date(), 'YYYY-MM-DD HH:mm:ss');
+    this.modifiedDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
   }
 }

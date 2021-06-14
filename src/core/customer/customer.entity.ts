@@ -117,11 +117,11 @@ export class Customer extends BaseModel {
 
   // @BeforeInsert()
   // public async createDetails(): Promise<void> {
-  //   this.createdDate = moment().format('YYYY-MM-DD HH:mm:ss');
+  //   this.createdDate = moment().format('yyyy-MM-dd HH:mm:ss');
   // }
 
   // @BeforeUpdate()
   // public async updateDetails(): Promise<void> {
-  //   this.modifiedDate = moment().format('YYYY-MM-DD HH:mm:ss');
+  //   this.modifiedDate = moment().format('yyyy-MM-dd HH:mm:ss');
   // }
 }
