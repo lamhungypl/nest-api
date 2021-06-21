@@ -6,5 +6,6 @@ import { ProductDiscountRepository } from './product-discount.repository';
 @Module({
   imports: [TypeOrmModule.forFeature([ProductDiscountRepository])],
   providers: [ProductDiscountService],
+  exports: [ProductDiscountService],
 })
 export class ProductDiscountModule {}

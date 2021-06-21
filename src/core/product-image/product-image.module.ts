@@ -6,5 +6,6 @@ import { ProductImageRepository } from './product-image.repository';
 @Module({
   imports: [TypeOrmModule.forFeature([ProductImageRepository])],
   providers: [ProductImageService],
+  exports: [ProductImageService],
 })
 export class ProductImageModule {}

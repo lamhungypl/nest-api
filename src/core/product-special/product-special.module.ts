@@ -6,5 +6,6 @@ import { ProductSpecialRepository } from './product-special.repository';
 @Module({
   imports: [TypeOrmModule.forFeature([ProductSpecialRepository])],
   providers: [ProductSpecialService],
+  exports: [ProductSpecialService],
 })
 export class ProductSpecialModule {}

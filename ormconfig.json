@@ -1,13 +1,9 @@
 {
-  "type": "postgres",
+  "type": "mysql",
   "host": "localhost",
-  "port": 5432,
-  "username": "postgres",
-  "password": "a123456",
-  "database": "iian-db",
-  "entities": ["dist/**/*.entity.{ts,js}"],
-  "migrations": ["dist/database/migrations/*.{ts,js}"],
-  "cli": {
-    "migrationsDir": "src/database/migrations/"
-  }
+  "port": 8889,
+  "username": "root",
+  "password": "root",
+  "database": "spurtecommerce",
+  "entities": ["dist/**/*.entity{.ts,.js}"]
 }

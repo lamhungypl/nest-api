@@ -23,7 +23,10 @@ import { ProductService } from './product.service';
 @Controller('/product')
 export class ProductController {
   constructor(
-    private readonly productService: ProductService, // private productImageService: ProductImageService, // private productDiscountService: ProductDiscountService, // private productSpecialService: ProductSpecialService,
+    private readonly productService: ProductService,
+    private productImageService: ProductImageService,
+    private productDiscountService: ProductDiscountService,
+    private productSpecialService: ProductSpecialService,
   ) {}
 
   @Post('/add-product')
@@ -106,13 +109,12 @@ export class ProductController {
     );
 
     const productList = productLists.map(async (value: Product) => {
-      const defaultValue = '';
-      // const defaultValue = await this.productImageService.findOne({
-      //   where: {
-      //     productId: value.productId,
-      //     defaultImage: 1,
-      //   },
-      // });
+      const defaultValue = await this.productImageService.findOne({
+        where: {
+          productId: value.productId,
+          defaultImage: 1,
+        },
+      });
       const temp: any = value;
       const nowDate = new Date();
       const todaydate =
