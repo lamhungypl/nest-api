@@ -1,4 +1,5 @@
 import { BaseModel } from '@modules/common/base.model';
+import { OrderProduct } from '@modules/order-product/order-product.entity';
 import { OrderStatus } from '@modules/order-status/order-status.entity';
 import { Exclude } from 'class-transformer';
 import { format } from 'date-fns';
@@ -9,10 +10,11 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity('orders')
+@Entity('order')
 export class Order extends BaseModel {
   @PrimaryGeneratedColumn({ name: 'order_id' })
   public orderId: number;
@@ -180,8 +182,8 @@ export class Order extends BaseModel {
   @JoinColumn({ name: 'order_status_id' })
   public orderStatus: OrderStatus;
 
-  // @OneToMany((type) => OrderProduct, (orderProduct) => orderProduct.product)
-  // public productlist: OrderProduct[];
+  @OneToMany((type) => OrderProduct, (orderProduct) => orderProduct.product)
+  public productlist: OrderProduct[];
 
   @BeforeInsert()
   public async createDetails(): Promise<void> {

@@ -1,25 +1,26 @@
+import { AddressModule } from '@modules/address';
+import { BannerModule } from '@modules/banner';
+import { CategoryModule } from '@modules/category';
+import { CustomerModule } from '@modules/customer';
+import { CustomerWishlistModule } from '@modules/customerWishlist';
+import { EmailTemplateModule } from '@modules/emailTemplate';
+import { LanguageModule } from '@modules/language';
+import { ManufactureModule } from '@modules/manufacture';
+import { MediaModule } from '@modules/media';
+import { OrderModule } from '@modules/order';
+import { OrderStatusModule } from '@modules/order-status';
+import { PageModule } from '@modules/page';
+import { ProductModule } from '@modules/product';
+import { ProductDiscountModule } from '@modules/product-discount';
+import { ProductImageModule } from '@modules/product-image';
+import { ProductSpecialModule } from '@modules/product-special';
+import { RoleModule } from '@modules/role';
+import { SettingModule } from '@modules/setting';
+import { UserModule } from '@modules/user';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-
-import { AddressModule } from './core/address/address.module';
-import { BannerModule } from '@modules/banner/banner.module';
-import { CategoryModule } from '@modules/category/category.module';
-import { ProductModule } from '@modules/product/product.module';
-import { CustomerModule } from '@modules/customer/customer.module';
-import { CustomerWishlistModule } from '@modules/customerWishlist/customer-wishlist.module';
-import { EmailTemplateModule } from '@modules/emailTemplate/email-template.module';
-import { LanguageModule } from '@modules/language/language.module';
-import { ManufactureModule } from '@modules/manufacture/manufacture.module';
-
-import { MediaModule } from '@modules/media/media.module';
-import { OrderModule } from '@modules/order/order.module';
-import { OrderStatusModule } from '@modules/order-status/order-status.module';
-import { PageModule } from '@modules/page/page.module';
-import { RoleModule } from '@modules/role/role.module';
-import { SettingModule } from '@modules/setting/setting.module';
-import { UserModule } from '@modules/user/user.module';
 
 @Module({
   imports: [
@@ -40,6 +41,9 @@ import { UserModule } from '@modules/user/user.module';
     RoleModule,
     SettingModule,
     UserModule,
+    ProductImageModule,
+    ProductDiscountModule,
+    ProductSpecialModule,
   ],
   controllers: [AppController],
   providers: [AppService],

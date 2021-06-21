@@ -1,3 +1,6 @@
+import { ProductDiscountService } from '@modules/product-discount';
+import { ProductImageService } from '@modules/product-image';
+import { ProductSpecialService } from '@modules/product-special';
 import {
   Body,
   Controller,
@@ -10,12 +13,18 @@ import {
   Req,
   Res,
 } from '@nestjs/common';
+import { classToPlain } from 'class-transformer';
 import { Request, Response } from 'express';
+import { isNumber, parseInt, pickBy } from 'lodash';
+import { FindManyOptions, Like } from 'typeorm';
+import { Product } from './product.entity';
 import { ProductService } from './product.service';
 
 @Controller('/product')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(
+    private readonly productService: ProductService, // private productImageService: ProductImageService, // private productDiscountService: ProductDiscountService, // private productSpecialService: ProductSpecialService,
+  ) {}
 
   @Post('/add-product')
   public async createBanner(
@@ -36,18 +45,110 @@ export class ProductController {
     return response.status(200).send({ message: 'update product' });
   }
 
-  @Get('/product-list')
+  @Get('/productlist')
   public async addressList(
     @Query('limit') limit: number,
     @Query('offset') offset: number,
     @Query('count') count: number | boolean,
+    @Query('sku') sku: string,
+    @Query('keyword') keyword: string,
+    @Query('status') status: string,
 
     @Res() response: Response,
     @Req() request: Request,
   ) {
-    const data = await this.productService.list({});
+    const relation = ['productToCategory'];
 
-    return response.status(200).send({ message: 'list product', data: data });
+    const options: FindManyOptions<Product> = {
+      ...pickBy<{ take?: number; skip?: number }>(
+        {
+          take: limit || undefined,
+          skip: offset || undefined,
+        },
+        (value) => isNumber(value),
+      ),
+      select: [
+        'productId',
+        'sku',
+        'name',
+        'quantity',
+        'price',
+        'image',
+        'imagePath',
+        'isFeatured',
+        'todayDeals',
+        'isActive',
+      ],
+      relations: relation,
+      where: pickBy(
+        {
+          name: (keyword && Like(`%${keyword}%`)) || undefined,
+          sku: (sku && Like(`%${sku}%`)) || undefined,
+
+          isActive: (status && parseInt(status)) || 1,
+        },
+        (value) => value != null,
+      ),
+    };
+
+    if (count) {
+      const productCount = await this.productService.productCount(options);
+
+      const successRes: any = {
+        status: 1,
+        message: 'Successfully got count ',
+        data: productCount,
+      };
+      return response.status(200).send(successRes);
+    }
+    const productLists: Product[] = await this.productService.productList(
+      options,
+    );
+
+    const productList = productLists.map(async (value: Product) => {
+      const defaultValue = '';
+      // const defaultValue = await this.productImageService.findOne({
+      //   where: {
+      //     productId: value.productId,
+      //     defaultImage: 1,
+      //   },
+      // });
+      const temp: any = value;
+      const nowDate = new Date();
+      const todaydate =
+        nowDate.getFullYear() +
+        '-' +
+        (nowDate.getMonth() + 1) +
+        '-' +
+        nowDate.getDate();
+      const productSpecial = { price: 0 };
+      // const productSpecial = await this.productSpecialService.findSpecialPrice(
+      //   value.productId,
+      //   todaydate,
+      // );
+      const productDiscount = { price: 0 };
+      // const productDiscount = await this.productDiscountService.findDiscountPrice(
+      //   value.productId,
+      //   todaydate,
+      // );
+      if (productSpecial !== undefined) {
+        temp.pricerefer = productSpecial.price;
+        temp.flag = 1;
+      } else if (productDiscount !== undefined) {
+        temp.pricerefer = productDiscount.price;
+        temp.flag = 0;
+      }
+      temp.productImage = defaultValue;
+      return temp;
+    });
+    const results = await Promise.all(productList);
+
+    const successResponse = {
+      status: 1,
+      message: 'Successfully got the complete product list. ',
+      data: classToPlain(results),
+    };
+    return response.status(200).send(successResponse);
   }
 
   @Delete('/delete-product/:id')

@@ -1,4 +1,4 @@
-import { OrderStatusModule } from '@modules/order-status/order-status.module';
+import { OrderStatusModule } from '@modules/order-status';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrderController } from './order.controller';

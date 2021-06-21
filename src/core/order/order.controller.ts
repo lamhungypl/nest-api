@@ -1,4 +1,4 @@
-import { OrderStatusService } from '@modules/order-status/order-status.service';
+import { OrderStatusService } from '@modules/order-status';
 import { Controller, Get, Query, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { pickBy, parseInt as _parseInt, isNumber, toNumber } from 'lodash';
@@ -76,6 +76,43 @@ export class OrderController {
       status: 1,
       message: 'Successfully got the complete order list.',
       data: results,
+    };
+    return response.status(200).send(successResponse);
+  }
+
+  @Get('saleslist')
+  /**
+   * salesList
+   */
+  public async salesList(@Res() response: Response) {
+    const orderList = await this.orderService.salesList();
+
+    //console.log(orderList);
+    const promises = orderList.map(async (result: any) => {
+      const monthNames = [
+        '',
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ];
+      const temp: any = result;
+      temp.monthYear = monthNames[result.month] + '-' + result.year;
+      return temp;
+    });
+    const finalResult = await Promise.all(promises);
+    const successResponse: any = {
+      status: 1,
+      message: 'Successfully get sales count List',
+      data: finalResult,
     };
     return response.status(200).send(successResponse);
   }

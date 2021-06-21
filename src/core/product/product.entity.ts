@@ -1,6 +1,9 @@
 import { BaseModel } from '@modules/common/base.model';
-import { CustomerWishlist } from '@modules/customerWishlist/customer-wishlist.entity';
-import { ProductToCategory } from '@modules/productToCategory/productToCategory.entity';
+import { CustomerWishlist } from '@modules/customerWishlist';
+import { OrderProduct } from '@modules/order-product';
+import { ProductImage } from '@modules/product-image';
+import { ProductToCategory } from '@modules/productToCategory';
+
 import { IsNotEmpty } from 'class-validator';
 import { format } from 'date-fns';
 
@@ -110,8 +113,8 @@ export class Product extends BaseModel {
   )
   public productToCategory: ProductToCategory[];
 
-  // @OneToMany(type => ProductImage, productImage => productImage.product)
-  // public productImage: ProductImage[];
+  @OneToMany((type) => ProductImage, (productImage) => productImage.product)
+  public productImage: ProductImage[];
 
   @OneToMany(
     (type) => CustomerWishlist,
@@ -128,9 +131,9 @@ export class Product extends BaseModel {
   // @OneToMany(type => ProductRating, productRating => productRating.product)
   // public productRating: ProductRating[];
 
-  // @OneToMany(
-  //   type => OrderProduct,
-  //   orderProduct => orderProduct.productInformationDetail
-  // )
-  // public orderProduct: OrderProduct[];
+  @OneToMany(
+    (type) => OrderProduct,
+    (orderProduct) => orderProduct.productInformationDetail,
+  )
+  public orderProduct: OrderProduct[];
 }
