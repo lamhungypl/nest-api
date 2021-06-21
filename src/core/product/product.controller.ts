@@ -153,6 +153,50 @@ export class ProductController {
     return response.status(200).send(successResponse);
   }
 
+  @Get('/top-selling-productlist')
+  /**
+   * topSelling
+   */
+  public async topSellingProductList(
+    @Req() request: any,
+    @Res() response: Response,
+  ) {
+    const data = await this.productService.recentProductSelling(4);
+    const promise = data.map(async (result: any) => {
+      const product = await this.productService.findOne({
+        select: [
+          'productId',
+          'image',
+          'imagePath',
+          'price',
+          'name',
+          'description',
+        ],
+        where: { productId: result.product },
+      });
+      // const temp: any = result;
+      const productImage = await this.productImageService.list({
+        select: ['productId', 'image', 'containerName'],
+        where: {
+          productId: result.product,
+          defaultImage: 1,
+        },
+      });
+      // temp.product = product;
+      // temp.productImage = productImage;
+      return { ...result, product, productImage };
+    });
+
+    const value = await Promise.all(promise);
+
+    const successResponse: any = {
+      status: 1,
+      message: 'Successfully get Top Selling Product..!',
+      data: value,
+    };
+    return response.status(200).send(successResponse);
+  }
+
   @Delete('/delete-product/:id')
   public async deleteAddress(
     @Param('id') id: number,

@@ -13,7 +13,7 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "lint": "eslint --config ./.eslintrc.js --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
@@ -89,7 +89,7 @@
   },
   "lint-staged": {
     "*.{js,ts}": [
-      "eslint --config ./.eslintrc.js --fix src/",
+      "npm run lint",
       "npm run format"
     ]
   }
