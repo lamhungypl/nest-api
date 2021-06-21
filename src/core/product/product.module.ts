@@ -1,3 +1,4 @@
+import { OrderModule } from '@modules/order';
 import { OrderProductModule } from '@modules/order-product';
 import { ProductDiscountModule } from '@modules/product-discount';
 import { ProductImageModule } from '@modules/product-image';
@@ -15,6 +16,7 @@ import { ProductService } from './product.service';
     ProductDiscountModule,
     ProductSpecialModule,
     ProductImageModule,
+    OrderModule,
   ],
   controllers: [ProductController],
   providers: [ProductService],

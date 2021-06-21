@@ -7,5 +7,6 @@ import { OrderProductService } from './order-product.service';
 @Module({
   imports: [TypeOrmModule.forFeature([OrderProductRepository])],
   providers: [OrderProductService],
+  exports: [OrderProductService],
 })
 export class OrderProductModule {}

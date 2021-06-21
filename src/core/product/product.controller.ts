@@ -1,3 +1,5 @@
+import { OrderService } from '@modules/order';
+import { OrderProductService } from '@modules/order-product';
 import { ProductDiscountService } from '@modules/product-discount';
 import { ProductImageService } from '@modules/product-image';
 import { ProductSpecialService } from '@modules/product-special';
@@ -27,6 +29,8 @@ export class ProductController {
     private productImageService: ProductImageService,
     private productDiscountService: ProductDiscountService,
     private productSpecialService: ProductSpecialService,
+    private orderService: OrderService,
+    private orderProductService: OrderProductService,
   ) {}
 
   @Post('/add-product')
@@ -193,6 +197,38 @@ export class ProductController {
       status: 1,
       message: 'Successfully get Top Selling Product..!',
       data: value,
+    };
+    return response.status(200).send(successResponse);
+  }
+
+  @Get('/recent-selling-product')
+  public async sellingProduct(
+    @Req() request: any,
+    @Res() response: any,
+  ): Promise<any> {
+    const limit = 3;
+    const orderList = await this.orderProductService.list({ take: limit });
+    const promises = orderList.map(async (result: any) => {
+      const order = await this.orderService.list({
+        select: ['invoiceNo', 'invoicePrefix', 'orderId', 'orderStatusId'],
+        where: { orderId: result.orderId },
+      });
+      // const temp: any = result;
+      // temp.order = order;
+      const productImage = await this.productImageService.list({
+        where: {
+          productId: result.productId,
+          defaultImage: 1,
+        },
+      });
+      // temp.productImage = product;
+      return { ...result, order, productImage };
+    });
+    const results = await Promise.all(promises);
+    const successResponse: any = {
+      status: 1,
+      message: 'successfully listed recently selling products..!',
+      data: results,
     };
     return response.status(200).send(successResponse);
   }
