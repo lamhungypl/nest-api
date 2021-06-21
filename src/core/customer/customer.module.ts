@@ -1,3 +1,4 @@
+import { LoginLogModule } from '@modules/login-log';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomerController } from './customer.controller';
@@ -5,7 +6,7 @@ import { CustomerRepository } from './customer.repository';
 import { CustomerService } from './customer.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CustomerRepository])],
+  imports: [TypeOrmModule.forFeature([CustomerRepository]), LoginLogModule],
   controllers: [CustomerController],
   providers: [CustomerService],
 })
