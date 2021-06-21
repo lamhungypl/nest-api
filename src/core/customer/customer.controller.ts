@@ -10,6 +10,7 @@ import {
   Req,
   Res,
 } from '@nestjs/common';
+import { classToPlain } from 'class-transformer';
 import { Request, Response } from 'express';
 import { notNullObject } from 'src/utils/common.utils';
 import { FindConditions, FindManyOptions, Like } from 'typeorm';
@@ -105,6 +106,25 @@ export class CustomerController {
       status: 1,
       message: 'Successfully got Customer list.',
       data: customerList,
+    };
+
+    return response.status(200).send(successResponse);
+  }
+
+  @Get('/recent-customerlist')
+  public async recentCustomerList(@Res() response: Response): Promise<any> {
+    const customerList = await this.customerService.list({
+      where: {
+        deleteFlag: 0,
+      },
+      order: {
+        createdDate: 1,
+      },
+    });
+    const successResponse: any = {
+      status: 1,
+      message: 'Successfully got Customer list.',
+      data: classToPlain(customerList),
     };
 
     return response.status(200).send(successResponse);
