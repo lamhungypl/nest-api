@@ -11,6 +11,9 @@ import {
   Res,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { notNullObject } from 'src/utils/common.utils';
+import { FindConditions, FindManyOptions, Like } from 'typeorm';
+import { Customer } from './customer.entity';
 import { CustomerService } from './customer.service';
 
 @Controller('/customer')
@@ -40,16 +43,71 @@ export class CustomerController {
 
   @Get('/customer-list')
   public async addressList(
-    @Query('limit') limit: number,
-    @Query('offset') offset: number,
+    @Query('limit') limit: string,
+    @Query('offset') offset: string,
+    @Query('name') name: string,
+    @Query('status') status: string,
+    @Query('email') email: string,
+    @Query('customerGroup') customerGroup: string,
+    @Query('date') date: string,
     @Query('count') count: number | boolean,
-
     @Res() response: Response,
     @Req() request: Request,
   ) {
-    const data = await this.customerService.list({});
+    const options: FindManyOptions<Customer> = {
+      ...notNullObject<FindManyOptions<Customer>>({
+        take: (limit && parseInt(limit)) || undefined,
+        skip: (offset && parseInt(offset)) || undefined,
+      }),
+      select: [
+        'id',
+        'username',
+        'firstName',
+        'lastName',
+        'email',
+        'address',
+        'mobileNumber',
+        'avatar',
+        'avatarPath',
+        'newsletter',
+        'mailStatus',
+        'isActive',
+        'modifiedDate',
+        'customerGroupId',
+        'createdDate',
+      ],
+      where: notNullObject<FindConditions<Customer>>({
+        firstName: (name && Like(`%${name}%`)) || undefined,
+        email: (email && Like(`%${email}%`)) || undefined,
+        createdDate: (date && Like(`%${date}%`)) || undefined,
+        customerGroupId: Number.isInteger(parseInt(customerGroup))
+          ? parseInt(customerGroup)
+          : undefined,
+        isActive: Number.isInteger(parseInt(status))
+          ? parseInt(status)
+          : undefined,
+        deleteFlag: 0,
+      }),
+    };
 
-    return response.status(200).send({ message: 'list customer', data: data });
+    if (count) {
+      const customerCount = await this.customerService.count(options);
+      const successResponse = {
+        status: 1,
+        message: 'Successfully got Customer list count',
+        data: customerCount,
+      };
+      return response.status(200).send(successResponse);
+    }
+    const customerList = await this.customerService.list(options);
+
+    const successResponse = {
+      status: 1,
+      message: 'Successfully got Customer list.',
+      data: customerList,
+    };
+
+    return response.status(200).send(successResponse);
   }
 
   @Delete('/delete-customer/:id')
