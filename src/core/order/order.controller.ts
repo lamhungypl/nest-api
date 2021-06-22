@@ -1,5 +1,5 @@
 import { OrderStatusService } from '@modules/order-status';
-import { Controller, Get, Query, Res } from '@nestjs/common';
+import { Controller, Get, ParseBoolPipe, Query, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { pickBy, parseInt as _parseInt, isNumber, toNumber } from 'lodash';
 import { FindManyOptions, Like, MoreThan } from 'typeorm';
@@ -17,18 +17,18 @@ export class OrderController {
   /**
    * orderList
    */
-  public async orderList(@Query() orderQuery: any, @Res() response: Response) {
-    const {
-      limit,
-      offset,
-      orderId,
-      orderStatusId,
-      customerName,
-      dateAdded,
-      count,
-      totalAmount,
-    } = orderQuery;
+  public async orderList(
+    @Query('limit') limit: string,
+    @Query('offset') offset: string,
+    @Query('orderId') orderId: string,
+    @Query('orderStatusId') orderStatusId: string,
+    @Query('customerName') customerName: string,
+    @Query('dateAdded') dateAdded: string,
+    @Query('count') count: string,
+    @Query('totalAmount') totalAmount: string,
 
+    @Res() response: Response,
+  ) {
     const options: FindManyOptions<Order> = {
       ...pickBy<{ take?: number; skip?: number }>(
         {
@@ -49,7 +49,8 @@ export class OrderController {
         (value) => value != null,
       ),
     };
-    if (count) {
+    const isCount = parseInt(count) || count === 'true';
+    if (isCount) {
       const orderCount = await this.orderService.count(options);
       const res = {
         status: 1,
