@@ -9,6 +9,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseBoolPipe,
   Post,
   Put,
   Query,
@@ -18,6 +19,7 @@ import {
 import { classToPlain } from 'class-transformer';
 import { Request, Response } from 'express';
 import { isNumber, parseInt, pickBy } from 'lodash';
+import { notNullObject } from 'src/utils/common.utils';
 import { FindManyOptions, Like } from 'typeorm';
 import { Product } from './product.entity';
 import { ProductService } from './product.service';
@@ -53,51 +55,44 @@ export class ProductController {
   }
 
   @Get('/productlist')
-  public async addressList(
-    @Query('limit') limit: number,
-    @Query('offset') offset: number,
-    @Query('count') count: number | boolean,
-    @Query('sku') sku: string,
+  public async productList(
+    @Query('limit') limit: string,
+    @Query('offset') offset: string,
     @Query('keyword') keyword: string,
+    @Query('sku') sku: string,
     @Query('status') status: string,
-
+    // @Query('price') price: number,
+    @Query('count', ParseBoolPipe) count: number | boolean,
     @Res() response: Response,
-    @Req() request: Request,
   ) {
     const relation = ['productToCategory'];
 
-    const options: FindManyOptions<Product> = {
-      ...pickBy<{ take?: number; skip?: number }>(
-        {
-          take: limit || undefined,
-          skip: offset || undefined,
-        },
-        (value) => isNumber(value),
-      ),
-      select: [
-        'productId',
-        'sku',
-        'name',
-        'quantity',
-        'price',
-        'image',
-        'imagePath',
-        'isFeatured',
-        'todayDeals',
-        'isActive',
-      ],
-      relations: relation,
-      where: pickBy(
-        {
-          name: (keyword && Like(`%${keyword}%`)) || undefined,
-          sku: (sku && Like(`%${sku}%`)) || undefined,
+    const options = {
+      ...notNullObject<FindManyOptions<Product>>({
+        take: parseInt(limit) || undefined,
+        skip: parseInt(offset) || undefined,
+        select: [
+          'productId',
+          'sku',
+          'name',
+          'quantity',
+          'price',
+          'image',
+          'imagePath',
+          'isFeatured',
+          'todayDeals',
+          'isActive',
+        ],
+        relations: relation,
+        where: {
+          name: Like(`%${keyword || ''}%`),
+          sku: Like(`%${sku || ''}%`),
 
           isActive: (status && parseInt(status)) || 1,
         },
-        (value) => value != null,
-      ),
+      }),
     };
-
+    console.log({ count });
     if (count) {
       const productCount = await this.productService.productCount(options);
 
@@ -127,16 +122,14 @@ export class ProductController {
         (nowDate.getMonth() + 1) +
         '-' +
         nowDate.getDate();
-      const productSpecial = { price: 0 };
-      // const productSpecial = await this.productSpecialService.findSpecialPrice(
-      //   value.productId,
-      //   todaydate,
-      // );
-      const productDiscount = { price: 0 };
-      // const productDiscount = await this.productDiscountService.findDiscountPrice(
-      //   value.productId,
-      //   todaydate,
-      // );
+      const productSpecial = await this.productSpecialService.findSpecialPrice(
+        value.productId,
+        todaydate,
+      );
+      const productDiscount = await this.productDiscountService.findDiscountPrice(
+        value.productId,
+        todaydate,
+      );
       if (productSpecial !== undefined) {
         temp.pricerefer = productSpecial.price;
         temp.flag = 1;
