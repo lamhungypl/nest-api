@@ -34,4 +34,13 @@ export class OrderService extends BaseService<Order, OrderRepository> {
     query.where('DATE(order.createdDate) = :todayDate', { todayDate });
     return query.getRawOne<number>();
   }
+
+  public async findAllTodayOrder(todayDate: string) {
+    const { total } = await this.repository.manager
+      .createQueryBuilder(Order, 'order')
+      .select([' SUM(order.total) as total'])
+      .where('DATE(order.createdDate) = :todayDate', { todayDate })
+      .getRawOne();
+    return total;
+  }
 }

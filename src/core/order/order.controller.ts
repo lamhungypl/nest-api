@@ -116,4 +116,82 @@ export class OrderController {
     };
     return response.status(200).send(successResponse);
   }
+
+  @Get('/today-order-amount')
+  public async todayOrderAmount(@Res() response: any): Promise<any> {
+    const nowDate = new Date();
+    const todaydate =
+      nowDate.getFullYear() +
+      '-' +
+      (nowDate.getMonth() + 1) +
+      '-' +
+      nowDate.getDate();
+    //console.log(todaydate);
+
+    try {
+      console.log('todaydate', todaydate);
+
+      const orderTotal = await this.orderService.findAllTodayOrder(todaydate);
+      console.log({ orderTotal });
+      const successResponse: any = {
+        status: 1,
+        message: 'Successfully get today order Amount',
+        data: orderTotal || 0,
+      };
+
+      return response.status(200).send(successResponse);
+    } catch (error) {
+      const errorResponse: any = {
+        status: 0,
+        message: 'unable to get today order amount',
+      };
+      return response.status(400).send(errorResponse);
+    }
+  }
+
+  @Get('/today-order-count')
+  public async orderCount(@Res() response: any): Promise<any> {
+    const nowDate = new Date();
+    const todaydate =
+      nowDate.getFullYear() +
+      '-' +
+      (nowDate.getMonth() + 1) +
+      '-' +
+      nowDate.getDate();
+
+    const orderCount = await this.orderService.findAllTodayOrderCount(
+      todaydate,
+    );
+    const successResponse: any = {
+      status: 1,
+      message: 'Successfully get Today order count',
+      data: orderCount,
+    };
+    return response.status(200).send(successResponse);
+  }
+
+  @Get('/total-order-amount')
+  public async totalOrderAmount(@Res() response: any): Promise<any> {
+    let total = 0;
+    const order = await this.orderService.list({});
+    let n = 0;
+    for (n; n < order.length; n++) {
+      total += +order[n].total;
+    }
+    if (order) {
+      const successResponse: any = {
+        status: 1,
+        message: 'Successfully get total order Amount',
+        data: total,
+      };
+
+      return response.status(200).send(successResponse);
+    } else {
+      const errorResponse: any = {
+        status: 0,
+        message: 'unable to get total order amount',
+      };
+      return response.status(400).send(errorResponse);
+    }
+  }
 }
