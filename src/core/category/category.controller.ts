@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseBoolPipe,
   Post,
   Put,
   Query,
@@ -11,7 +12,12 @@ import {
   Res,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { notNullObject } from 'src/utils/common.utils';
+import { FindManyOptions, Like } from 'typeorm';
+import { Category } from './category.entity';
 import { CategoryService } from './category.service';
+
+import arrayToTree from 'array-to-tree';
 
 @Controller('/category')
 export class CategoryController {
@@ -39,17 +45,56 @@ export class CategoryController {
   }
 
   @Get('/category-list')
-  public async addressList(
-    @Query('limit') limit: number,
-    @Query('offset') offset: number,
-    @Query('count') count: number | boolean,
-
+  public async CategoryList(
+    @Query('limit') limit: string,
+    @Query('offset') offset: string,
+    @Query('keyword') keyword: string,
+    @Query('sortOrder') sortOrder: string,
+    @Query('count', ParseBoolPipe) count: number | boolean,
+    @Req() request: any,
     @Res() response: Response,
-    @Req() request: Request,
-  ) {
-    const data = await this.categoryService.list({});
+  ): Promise<any> {
+    const options = notNullObject<FindManyOptions<Category>>({
+      take: (limit && parseInt(limit)) || undefined,
+      skip: (offset && parseInt(offset)) || undefined,
+      select: [
+        'categoryId',
+        'name',
+        'image',
+        'imagePath',
+        'parentInt',
+        'sortOrder',
+        'metaTagTitle',
+        'metaTagDescription',
+        'metaTagKeyword',
+      ],
+      where: {
+        name: Like(`%${keyword || ''}%`),
+        isActive: 1,
+      },
+    });
 
-    return response.status(200).send({ message: 'list category', data: data });
+    if (count) {
+      const categoryDataCount = await this.categoryService.count(options);
+      const successResponse: any = {
+        status: 1,
+        message: 'Successfully get All category List',
+        data: categoryDataCount,
+      };
+      return response.status(200).send(successResponse);
+    } else {
+      const categoryData = await this.categoryService.list(options);
+      const categoryList = arrayToTree(categoryData, {
+        parentProperty: 'parentInt',
+        customID: 'categoryId',
+      });
+      const successResponse: any = {
+        status: 1,
+        message: 'Successfully got the list of categories.',
+        data: categoryList,
+      };
+      return response.status(200).send(successResponse);
+    }
   }
 
   @Delete('/delete-category/:id')
